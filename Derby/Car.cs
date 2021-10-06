@@ -9,6 +9,12 @@ namespace Derby
         //public int Speed { get; set; }
         public string Direction { get; set; }
 
+        private int carNumber;
+
+        private static int carCount = 0;
+
+        public bool IsPlayer { get; set; }
+
         private int speed;
         public int Speed
         {
@@ -58,20 +64,19 @@ namespace Derby
             Direction = "North";
             TankCapacity = tankCapacity;
             FillTank();
+            carCount++;
+            carNumber = carCount;
         }
 
         public void StartEngine()
         {
             IsEngineRunning = true;
-            Console.WriteLine("Engine started!");
         }
 
         public void StopEngine()
         {
             IsEngineRunning = false;
             Speed = 0;
-            Console.WriteLine("Engine stopped!");
-
         }
 
         public void Accelerate()
@@ -79,7 +84,6 @@ namespace Derby
             if (IsEngineRunning)
             {
                 Speed++;
-                Console.WriteLine("Vroom");
                 Gas--;
                 if (Gas == 0)
                 {
@@ -106,7 +110,6 @@ namespace Derby
         public void FillTank()
         {
             Gas = TankCapacity;
-            Console.WriteLine("Gassed up and ready to go!");
         }
 
         public void TurnRight()
@@ -129,31 +132,19 @@ namespace Derby
             }
         }
 
-
-
-        private double balance;
-        public double Balance
+        public void Display()
         {
-            get
+            if (IsPlayer)
             {
-                return balance;
+                Console.Write("P");
             }
-            private set
+            else
             {
-                balance = value;
+                Console.Write($"{carNumber}");
+
             }
-   
         }
 
-        private string vote;
-        public string Vote
-        {
- 
-            set
-            {
-                vote = value;
-            }
-        }
     }
 
 
