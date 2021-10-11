@@ -132,6 +132,26 @@ namespace Derby
             }
         }
 
+        public void TurnLeft()
+        {
+            if (Direction == "North")
+            {
+                Direction = "West";
+            }
+            else if (Direction == "East")
+            {
+                Direction = "North";
+            }
+            else if (Direction == "South")
+            {
+                Direction = "East";
+            }
+            else
+            {
+                Direction = "South";
+            }
+        }
+
         public void Display()
         {
             if (IsPlayer)
