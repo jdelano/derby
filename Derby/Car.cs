@@ -3,6 +3,56 @@ namespace Derby
 {
     public class Car
     {
+        private int locationX;
+        public int LocationX
+        {
+            get
+            {
+                return locationX;
+            }
+            set
+            {
+                if (value < 1)
+                {
+                    locationX = 1;
+                }
+                else if (value > 78)
+                {
+                    locationX = 78;
+                }
+                else
+                {
+                    locationX = value;
+                }
+            }
+        }
+
+        private int locationY;
+        public int LocationY
+        {
+            get
+            {
+                return locationY;
+            }
+            set
+            {
+                if (value < 1)
+                {
+                    locationY = 1;
+                }
+                else if (value > 78)
+                {
+                    locationY = 78;
+                }
+                else
+                {
+                    locationY = value;
+                }
+            }
+        }
+
+        private static Random randomGenerator = new Random();
+
         //public double TankCapacity { get; set; }
         //public double Gas { get; set; }
         public bool IsEngineRunning { get; set; }
@@ -66,6 +116,8 @@ namespace Derby
             FillTank();
             carCount++;
             carNumber = carCount;
+            LocationX = randomGenerator.Next(1, 78);
+            LocationY = randomGenerator.Next(1, 21);
         }
 
         public void StartEngine()
@@ -154,6 +206,10 @@ namespace Derby
 
         public void Display()
         {
+            
+            int cursorLeft = Console.CursorLeft;
+            int cursorTop = Console.CursorTop;
+            Console.SetCursorPosition(LocationX, LocationY);
             if (IsPlayer)
             {
                 Console.Write("P");
@@ -161,8 +217,8 @@ namespace Derby
             else
             {
                 Console.Write($"{carNumber}");
-
             }
+            Console.SetCursorPosition(cursorLeft, cursorTop);
         }
 
     }
