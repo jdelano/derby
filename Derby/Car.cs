@@ -136,6 +136,22 @@ namespace Derby
             if (IsEngineRunning)
             {
                 Speed++;
+                switch (Direction)
+                {
+                    case "North":
+                        LocationY--;
+                        break;
+                    case "South":
+                        LocationY++;
+                        break;
+                    case "East":
+                        LocationX++;
+                        break;
+                    case "West":
+                        LocationX--;
+                        break;
+
+                }
                 Gas--;
                 if (Gas == 0)
                 {
@@ -221,8 +237,23 @@ namespace Derby
             Console.SetCursorPosition(cursorLeft, cursorTop);
         }
 
+        public void MakeRandomMovement()
+        {
+            switch (randomGenerator.Next(1, 6))
+            {
+                case int roll when roll >= 1 && roll <= 3:
+                    Accelerate();
+                    break;
+                case 4:
+                    TurnLeft();
+                    break;
+                case 5:
+                    TurnRight();
+                    break;
+            }
     }
+        }
 
-
+    
   
 }

@@ -3,28 +3,85 @@ namespace Derby
 {
     public class Game
     {
+        private bool isPlaying = true;
+
         public Car Player { get; set; }
         public Car Opponent { get; set; }
-        public Car Opponent2 { get; set; }
 
         public void Run()
         {
-            DrawMap(78, 23);
+            InitializeGame();
+            do
+            {
+                ProcessInput();
+                UpdateGame();
+                RenderOutput();
+            } while (isPlaying);
+        }
 
-            Player = new Car(300);
-            Player.StartEngine();
-            Player.IsPlayer = true;
-            Player.Display();
+        private void RenderOutput()
+        {
+            if (invalidated)
+            {
+                Console.Clear();
+                DrawMap(79, 24);
+                Player.Display();
+                Opponent.Display();
+                invalidated = false;
+            }
+        }
+
+        private DateTime gameTime = DateTime.Now;
+        private void UpdateGame()
+        {
+            int updateInterval = 250; // 1/2 a second
+            if (DateTime.Now.Subtract(gameTime) >
+                TimeSpan.FromMilliseconds(updateInterval))
+            {
+                Opponent.MakeRandomMovement();
+                invalidated = true;
+                gameTime = DateTime.Now;
+            }
+        }
+
+        private bool invalidated = true;
+
+        private void ProcessInput()
+        {
+            ConsoleKeyInfo keyInfo;
             
+            if (Console.KeyAvailable)
+            {
+                keyInfo = Console.ReadKey();
+                switch (keyInfo.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        Player.Accelerate();
+                        invalidated = true;
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        Player.TurnLeft();
+                        invalidated = true;
+                        break;
+                    case ConsoleKey.RightArrow:
+                        Player.TurnRight();
+                        invalidated = true;
+                        break;
+                    case ConsoleKey.Q:
+                        isPlaying = false;
+                        break;
+                }
+            }
+        }
+
+        private void InitializeGame()
+        {
+            Player = new Car(300);
+            Player.IsPlayer = true;
+            Player.StartEngine();
             Opponent = new Car(300);
             Opponent.StartEngine();
-            Opponent.Display();
 
-            Opponent2 = new Car(300);
-            Opponent2.StartEngine();
-            Opponent2.Display();
-            //Player.StartEngine();
-            //Player.TurnRight();
         }
 
         public void DrawMap(int width, int height)
@@ -34,7 +91,7 @@ namespace Derby
                 for (int columnsPrinted = 1; columnsPrinted <= width; columnsPrinted++)
                 {
                     if (rowsPrinted == 1 || rowsPrinted == height ||
-                        columnsPrinted == 1 || columnsPrinted == width - 1)
+                        columnsPrinted == 1 || columnsPrinted == width)
                     {
                         Console.Write("*");
                     }
