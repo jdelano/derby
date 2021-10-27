@@ -16,9 +16,9 @@ namespace Derby
                 {
                     locationX = 1;
                 }
-                else if (value > 78)
+                else if (value > 77)
                 {
-                    locationX = 78;
+                    locationX = 77;
                 }
                 else
                 {
@@ -40,9 +40,9 @@ namespace Derby
                 {
                     locationY = 1;
                 }
-                else if (value > 78)
+                else if (value > 22)
                 {
-                    locationY = 78;
+                    locationY = 22;
                 }
                 else
                 {
@@ -117,7 +117,7 @@ namespace Derby
             carCount++;
             carNumber = carCount;
             LocationX = randomGenerator.Next(1, 78);
-            LocationY = randomGenerator.Next(1, 21);
+            LocationY = randomGenerator.Next(1, 24);
         }
 
         public void StartEngine()
