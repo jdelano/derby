@@ -4,7 +4,8 @@ namespace Derby
     public class Game
     {
         private bool isPlaying = true;
-
+        private int totalLasers;
+        public Laser[] Lasers { get; set; }
         public Car Player { get; set; }
         public Car[] Opponents { get; set; }
 
@@ -31,6 +32,13 @@ namespace Derby
                     Opponents[i].Display();
 
                 }
+                for (int i = 0; i < totalLasers; i++)
+                {
+                    if (Lasers[i] != null)
+                    {
+                        Lasers[i].Display();
+                    }
+                }
                 invalidated = false;
             }
         }
@@ -46,6 +54,13 @@ namespace Derby
                 {
                     Opponents[i].MakeRandomMovement();
 
+                }
+                for (int i = 0; i < Lasers.Length; i++)
+                {
+                    if (Lasers[i] != null)
+                    {
+                        Lasers[i].AdvanceLaser();
+                    }
                 }
                 invalidated = true;
                 gameTime = DateTime.Now;
@@ -75,6 +90,20 @@ namespace Derby
                         Player.TurnRight();
                         invalidated = true;
                         break;
+                    case ConsoleKey.Spacebar:
+                        if (totalLasers < 3)
+                        {
+                            Lasers[totalLasers] = new Laser(Player.LocationX, Player.LocationY, Player.Direction);
+                            totalLasers++;
+                        }
+                        else
+                        {
+                            Array.Clear(Lasers, 0, Lasers.Length);
+                            totalLasers = 0;
+                            Lasers[totalLasers] = new Laser(Player.LocationX, Player.LocationY, Player.Direction);
+                            totalLasers++;
+                        }
+                        break;
                     case ConsoleKey.Q:
                         isPlaying = false;
                         break;
@@ -93,7 +122,7 @@ namespace Derby
                 Opponents[i] = new Car(300);
                 Opponents[i].StartEngine();
             }
-            
+            Lasers = new Laser[3];
 
         }
 
