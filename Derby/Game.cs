@@ -1,13 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace Derby
 {
     public class Game
     {
         private bool isPlaying = true;
-        private int totalLasers;
-        public Laser[] Lasers { get; set; }
+        //private int totalLasers;
+        //public Laser[] Lasers { get; set; }
         public Car Player { get; set; }
-        public Car[] Opponents { get; set; }
+        //public Car[] Opponents { get; set; }
+        public List<Car> Opponents { get; set; }
+        public List<Laser> Lasers { get; set; }
+
+        private const int startingOpponents = 8;
 
         public void Run()
         {
@@ -27,18 +33,27 @@ namespace Derby
                 Console.Clear();
                 DrawMap(79, 24);
                 Player.Display();
-                for (int i = 0; i < Opponents.Length; i++)
+                foreach (var opponent in Opponents)
                 {
-                    Opponents[i].Display();
+                    opponent.Display();
+                }
 
-                }
-                for (int i = 0; i < totalLasers; i++)
+                foreach (var laser in Lasers)
                 {
-                    if (Lasers[i] != null)
-                    {
-                        Lasers[i].Display();
-                    }
+                    laser.Display();
                 }
+                //for (int i = 0; i < Opponents.Length; i++)
+                //{
+                //    Opponents[i].Display();
+
+                //}
+                //for (int i = 0; i < totalLasers; i++)
+                //{
+                //    if (Lasers[i] != null)
+                //    {
+                //        Lasers[i].Display();
+                //    }
+                //}
                 invalidated = false;
             }
         }
@@ -50,18 +65,26 @@ namespace Derby
             if (DateTime.Now.Subtract(gameTime) >
                 TimeSpan.FromMilliseconds(updateInterval))
             {
-                for (int i = 0; i < Opponents.Length; i++)
+                foreach (var opponent in Opponents)
                 {
-                    Opponents[i].MakeRandomMovement();
+                    opponent.MakeRandomMovement();
+                }
+                foreach (var laser in Lasers)
+                {
+                    laser.AdvanceLaser();
+                }
+                //for (int i = 0; i < Opponents.Length; i++)
+                //{
+                //    Opponents[i].MakeRandomMovement();
 
-                }
-                for (int i = 0; i < Lasers.Length; i++)
-                {
-                    if (Lasers[i] != null)
-                    {
-                        Lasers[i].AdvanceLaser();
-                    }
-                }
+                //}
+                //for (int i = 0; i < Lasers.Length; i++)
+                //{
+                //    if (Lasers[i] != null)
+                //    {
+                //        Lasers[i].AdvanceLaser();
+                //    }
+                //}
                 invalidated = true;
                 gameTime = DateTime.Now;
             }
@@ -91,18 +114,23 @@ namespace Derby
                         invalidated = true;
                         break;
                     case ConsoleKey.Spacebar:
-                        if (totalLasers < 3)
+                        if (Lasers.Count >= 3)
                         {
-                            Lasers[totalLasers] = new Laser(Player.LocationX, Player.LocationY, Player.Direction);
-                            totalLasers++;
+                            Lasers.Clear();
                         }
-                        else
-                        {
-                            Array.Clear(Lasers, 0, Lasers.Length);
-                            totalLasers = 0;
-                            Lasers[totalLasers] = new Laser(Player.LocationX, Player.LocationY, Player.Direction);
-                            totalLasers++;
-                        }
+                        Lasers.Add(new Laser(Player.LocationX, Player.LocationY, Player.Direction));
+                        //if (totalLasers < 3)
+                        //{
+                        //    Lasers[totalLasers] = new Laser(Player.LocationX, Player.LocationY, Player.Direction);
+                        //    totalLasers++;
+                        //}
+                        //else
+                        //{
+                        //    Array.Clear(Lasers, 0, Lasers.Length);
+                        //    totalLasers = 0;
+                        //    Lasers[totalLasers] = new Laser(Player.LocationX, Player.LocationY, Player.Direction);
+                        //    totalLasers++;
+                        //}
                         break;
                     case ConsoleKey.Q:
                         isPlaying = false;
@@ -116,13 +144,22 @@ namespace Derby
             Player = new Car(300);
             Player.IsPlayer = true;
             Player.StartEngine();
-            Opponents = new Car[8];
-            for (int i = 0; i < Opponents.Length; i++)
+            Opponents = new List<Car>();
+            Lasers = new List<Laser>();
+            for (int i = 0; i < startingOpponents; i++)
             {
-                Opponents[i] = new Car(300);
-                Opponents[i].StartEngine();
+                Car opponent = new Car(600);
+                opponent.StartEngine();
+                Opponents.Add(opponent);
             }
-            Lasers = new Laser[3];
+
+            //Opponents = new Car[8];
+            //for (int i = 0; i < Opponents.Length; i++)
+            //{
+            //    Opponents[i] = new Car(300);
+            //    Opponents[i].StartEngine();
+            //}
+            //Lasers = new Laser[3];
 
         }
 
