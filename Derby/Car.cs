@@ -222,7 +222,7 @@ namespace Derby
 
         public void Display()
         {
-            
+
             int cursorLeft = Console.CursorLeft;
             int cursorTop = Console.CursorTop;
             Console.SetCursorPosition(LocationX, LocationY);
@@ -251,9 +251,20 @@ namespace Derby
                     TurnRight();
                     break;
             }
-    }
         }
 
-    
-  
+        public bool IsCarHitting(Car car)
+        {
+            return LocationX == car.LocationX && LocationY == car.LocationY;
+        }
+
+        public bool IsLaserHitting(Laser laser)
+        {
+            return LocationX == laser.LocationX && LocationY == laser.LocationY;
+
+        }
+    }
+
+
+
 }

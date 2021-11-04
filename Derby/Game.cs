@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Derby
 {
@@ -33,15 +34,6 @@ namespace Derby
                 Console.Clear();
                 DrawMap(79, 24);
                 Player.Display();
-                foreach (var opponent in Opponents)
-                {
-                    opponent.Display();
-                }
-
-                foreach (var laser in Lasers)
-                {
-                    laser.Display();
-                }
                 //for (int i = 0; i < Opponents.Length; i++)
                 //{
                 //    Opponents[i].Display();
@@ -54,6 +46,55 @@ namespace Derby
                 //        Lasers[i].Display();
                 //    }
                 //}
+                foreach (var opponent in Opponents)
+                {
+                    opponent.Display();
+                }
+
+                foreach (var laser in Lasers)
+                {
+                    laser.Display();
+                }
+
+                //for (int i = Opponents.Count - 1; i >= 0; i--)
+                //{
+                //    if (Player.IsCarHitting(Opponents[i]))
+                //    {
+                //        Opponents.RemoveAt(i);
+                //    }
+                //}
+
+                var carCollisions = from opponent in Opponents
+                                    where Player.IsCarHitting(opponent)
+                                    select opponent;
+
+                foreach (var car in carCollisions.ToList())
+                {
+                    Opponents.Remove(car);
+                }
+
+                //for (int i = Opponents.Count - 1; i >= 0; i--)
+                //{
+                //    for (int j = Lasers.Count - 1; j >= 0; j--)
+                //    {
+                //        if (Opponents[i].IsLaserHitting(Lasers[j]))
+                //        {
+                //            Opponents.RemoveAt(i);
+                //            Lasers.RemoveAt(j);
+                //        }
+                //    }
+                //}
+
+                var laserCollisions = from opponent in Opponents
+                                      from laser in Lasers
+                                      where opponent.IsLaserHitting(laser)
+                                      select new { Opponent = opponent, Laser = laser };
+
+                foreach (var crash in laserCollisions.ToList())
+                {
+                    Opponents.Remove(crash.Opponent);
+                    Lasers.Remove(crash.Laser);
+                }
                 invalidated = false;
             }
         }
